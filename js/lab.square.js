@@ -1,16 +1,24 @@
-// functional
+// functional declaration
 function square(number) {
     return number * number;
 }
-
 console.log(square(2));
 
+// with arrow
+newSquare = (number) => {
+    return number*number;
+}
+
+console.log(newSquare(11));
+
+
+
 // anonymous expression
-var square1 = function(number) { return number * number }
+const square1 = function(number) { return number * number }
 
 console.log(square1(3));
 
 // named expression
-var square2 = function sqr (number) { return number * number }
+let square2 = function sqr (number) { return number * number }
 
 console.log(square2(4));

@@ -125,7 +125,7 @@ function square(number) {
 var square = function(number) { return number * number }
 ```
 
-> Exmample of a named function expression:
+> Example of a named function expression:
 ```javascript
 var square = function sqr (number) { return number * number }
 console.log(square(2)); // returns 4
@@ -373,7 +373,7 @@ console.log(bar.getMusic()); //'jazz' (property of object: bar)
 
 > Why does ```bar.getMusic()``` output "jazz"?
 
-> The reason for that is that then a function is a _method_ of an object, the ```this``` keyword refers to the object upon which that function is invoked.
+> The reason for that is that when a function is a _method_ of an object, the ```this``` keyword refers to the object upon which that function is invoked.
 
 > Here, ```this``` refers to the _object_ upon which the ```getMusic``` function is called - the ```bar``` object
 
