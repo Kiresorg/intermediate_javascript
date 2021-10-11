@@ -1,14 +1,10 @@
-const foo = {
-    fn: function() {
-        let a = "outer function";
-        console.log(this.a);
-    },
-    y : {
-        fn: function() {
-            let a = "inner function";
-            console.log(this.a);
-        }
+function makeFunc() {
+    var name = 'FooBar';
+    function displayName() {
+      console.log(name);
     }
-}
-
-foo.fn();
+    return displayName;
+  }
+  
+  var myFunc = makeFunc();
+  myFunc();

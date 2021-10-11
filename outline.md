@@ -286,9 +286,12 @@ bar(10);
 <details>
   <summary>Execution context (this)</summary>
 
-> The keyword ```this``` is used to work with _context_ - that is, to what does a particular property belong? That is, what is the scope we are concerned with?
+> The keyword ```this``` is used to work with _context_ - that is, it refers to the object upon which a function is invoked
 
-> Simple example:
+> That means the ```this``` keyword can only be used in a function, or globally
+
+> Simple example of use in a function:
+
 ```javascript
 const test = {
   prop: 42,
@@ -300,29 +303,210 @@ const test = {
 console.log(test.func());
 // expected output: 42
 ```
-> Here, the ```this``` keyword has a context of the ```test``` object
+> Here, the ```func``` function is invoked on the ```test``` object, so we can use the ```this``` keyword to refer to the ```test``` object
 
-> ```this``` at the global level is called on the global object
+> Simple example of use at the global level:
 
-Example:
 ```javascript
 // this code needs to run in a browser
 // recall that in a browser, the window object is the global object
 console.log(this === window);
 
-// using the this keyword
 var a = 15;
 console.log(this.a);
 ```
+
+> The keywork ```this``` means different things depending on where it is used. Let's explore some of the more common uses:
+
+> Example: Global property
+
+```javascript
+window.music = "classical";
+
+console.log(this.music); //"classical" (global)
+```
+
+> Note that it's not good practice to execute at the global context; this just illustrates how ```this``` refers to the window (global) object
+
+> Example: Add a function
+
+```javascript
+window.music = 'classical';
+
+var foo = function (){
+    var music = 'blues';
+
+    return this.music;
+};
+
+console.log(this.music); //'classical' (global)
+
+console.log(foo()); //'classical' (global)
+```
+
+> Here, you might expect ```this.music``` to output "blues". Why doesn't it?
+
+> In the function ```foo```, ```music``` is a variable - and ```this``` refers only to _objects_, not variables. So here, ```this``` in ```return this.music``` refers to the _object_ to which the function ```foo``` belongs - the ```window``` object
+
+> Example with nested function:
+
+```javascript
+window.music = 'classical';
+
+var foo = function (){
+    var music = 'blues';
+    return this.music;
+},
+bar = {
+    music : 'jazz',
+    getMusic : function(){
+        return this.music;
+    }
+};
+
+console.log(this.music); //'classical' (global)
+
+console.log(foo()); //'classical' (global)
+
+console.log(bar.getMusic()); //'jazz' (property of object: bar)
+```
+
+> Why does ```bar.getMusic()``` output "jazz"?
+
+> The reason for that is that then a function is a _method_ of an object, the ```this``` keyword refers to the object upon which that function is invoked.
+
+> Here, ```this``` refers to the _object_ upon which the ```getMusic``` function is called - the ```bar``` object
+
+>Example with a constructor
+```javascript
+window.music = 'classical';
+
+var foo = function (){
+            var music = 'blues';
+
+            return this.music;
+      },
+      bar = {
+            music : 'jazz',
+            getMusic : function(){
+                        return this.music;
+            }
+      },
+      Baz = function(){
+            this.music = 'rock';
+
+            this.getMusic = function(){
+                        return this.music;
+            };
+      },
+      bif = new Baz();
+
+console.log(this.music); //'classical' (global)
+
+console.log(foo()); //'classical' (global)
+
+console.log(bar.getMusic()); // 'jazz' (property of object: bar)
+
+console.log(bif.getMusic()); // 'rock' (property of instance object: bif)
+```
+
+> Why does ```bif.getMusic()``` output "rock"?
+
+> What would the output be if we simply called ```Baz()```?
 
 </details>
 
 <details>
   <summary>Scope</summary>
+
+> Understanding the difference between _scope_ and _context_ is important
+>> _scope_ relates to the visibility of variables
+
+>> _context_ (```this```) relates to object to which a function belongs
+
+> It can help to review how scope worked pre-ES6:
+
+> SCOPING IN JAVASCRIPT IS _LEXICAL_ NOT _BLOCK_ - meaning, a variable declared outside a function MAY BE ACCESSED INSIDE THAT FUNCTION
+
+> The word lexical refers to the fact that lexical scoping uses the location where a variable is declared within the source code to determine where that variable is available
+
+> Let's see how that works with the pre-ES6 ```var``` kayword:
+
+> Consider this code:
+
+```javascript
+    var greeter = "hey hi";
+    var times = 4;
+
+    if (times > 3) {
+        var greeter = "say Hello instead"; 
+    }
+    
+    console.log(greeter) // "say Hello instead"
+```
+
+> On line 5, we've changed the value of the variable ```greeter``` - but what if we weren't aware that the code already had a variable named ```greeter```?
+
+> Here comes ```let```
+
+> The big difference: ```let``` is _block scoped_ - meaning anything inside curly brackets is only accessible inside those brackets (the "block")
+
+Example:
+```javascript
+   let greeting = "say Hi";
+   let times = 4;
+
+   if (times > 3) {
+        let hello = "say Hello instead";
+        console.log(hello);// "say Hello instead"
+    }
+   console.log(hello) // hello is not defined
+```
 </details>
 
 <details>
   <summary>Closures</summary>
+
+> Closures are _very_ important for maintaining data privacy in you code
+
+> A closure is the combination of a function bundled together (enclosed) with references to its surrounding state (the lexical environment)
+
+> In other words, a closure gives you access to an outer function’s scope from an inner function
+
+> In JavaScript, closures are created every time a function is created, at function creation time
+
+> How do you use a closure? _Define a function inside another function and expose it_
+
+> How do you expose a function? _Return it or pass it to another function_
+
+> Let's look at an example, starting with another example of lexical scoping:
+
+```javascript
+function init() {
+  var name = 'FooBar'; // name is a local variable created by init
+  function displayName() { // displayName() is the inner function, a closure
+    console.log(name); // use variable declared in the parent function
+  }
+  displayName();
+}
+init();
+```
+
+> Now look at this example, with a closure:
+
+```javascript:
+function makeFunc() {
+  var name = 'FooBar';
+  function displayName() {
+    alert(name);
+  }
+  return displayName;
+}
+
+var myFunc = makeFunc();
+myFunc();
+```
+
 </details>
 
 
