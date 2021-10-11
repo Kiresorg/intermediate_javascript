@@ -194,7 +194,7 @@ console.log(square(2)); // returns 4
 <details>
   <summary>Putting script in a web page</summary>
 
-> Reference your ```lab.power.js``` file in ```index.js```
+> Reference your ```lab.power.js``` file in ```index.html```
 >> Verify this works by viewing the Developer Tools console for expected output
 </details>
 
