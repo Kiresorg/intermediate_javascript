@@ -509,14 +509,10 @@ myFunc();
 
 </details>
 
-
-### DEMO
-- Demonstrate the above JS elements
-
-### LAB
+### LAB: Convert old JS to ES6 syntax
 
 <details>
-  <summary>let, const: Convert old JS to ES6 syntax</summary>
+  <summary>Convert a simple Todo app</summary>
 
 You have a pre-ES6 JS "Todo" app. Here is your code:
 
@@ -726,13 +722,11 @@ function newElement() {
 
 </details>
 
-- YOUR TASK: Rewrite the JS to use ES6 syntax. Pay attention to the use of the ```let``` and ```const``` keywords
+> YOUR TASK: Rewrite the JS to use ES6 syntax. Pay attention to the use of the ```let``` and ```const``` keywords, as well as arrow functions
+
+> Create your app in a new folder in your project. Call the folder ```todo```
 
 </details>
-
-### LAB
-- Arrow functions
-- YOUR TASK: Rewrite the JS in the Todo app to use arrow functions
 
 ### LAB
 - Execution context (this)
@@ -740,29 +734,179 @@ function newElement() {
 
 ### LAB
 - Closures
+- YOUR TASK: Write a simple program to demonstrate use of the ```this``` keyword to a new JS learner
 
 
 ## Functional programming
 
-### LECTURE
-- Higher-order functions
+<details>
+  <summary>Higher-order functions</summary>
 
-### DEMO
-- Higher-order functions
+> Remember that functions are just another type of data in JS
 
-### LECTURE
-- Array data processing
+> You can assign a function as the value of a variable
 
-### DEMO
-- Array data processing
+Example:
 
-### LAB
-- Array data processing
+```javascript
+let plusFive = (number) => {
+  return number + 5;  
+};
+// f is assigned the value of plusFive
+let f = plusFive;
+ 
+plusFive(3); // 8
+// Since f has a function value, it can be invoked. 
+f(9); // 14
+```
+
+> Functions are different from other data types because they can be _invoked_
+
+> We can also pass a function to another function as an arguement. When we do that, we need special names for the functions involved:
+
+>> The function we are passing in is called a "callback" function
+
+>> The function receiving the callback function is called the "higher-order" function. This is because, in relation to the callback function, the receiving function is "higher" the context of the execution environment
+
+>> Another way of thinking of this is that higher-order functions are functions that perform operations on _other functions_
+
+Example:
+
+```javascript
+const isEven = (n) => {
+  return n % 2 == 0;
+}
+ 
+let printMsg = (evenFunc, num) => {
+  const isNumEven = evenFunc(num);
+  console.log(`The number ${num} is an even number: ${isNumEven}.`)
+}
+ 
+// Pass in isEven as the callback function
+printMsg(isEven, 4); 
+// Prints: The number 4 is an even number: True.
+```
+
+
+</details>
+
+## LAB: Writing higher-order functions
+
+<details>
+  <summary>Using forEach()</summary>
+
+> You have this function:
+
+```javascript
+const numbers = [1, 2, 3, 4, 5];
+
+function addOne(array) {
+  for (let i = 0; i < array.length; i++) {
+    console.log(array[i] + 1);
+  }
+}
+
+addOne(numbers);
+```
+
+> Look up the higher-order function ```forEach()``` and refactor the ```addOne``` function to make use of it
+</details>
+
+<details>
+  <summary>Using filter()</summary>
+
+1. Create a function which taked in two parameters: an array of integers, and an empty array. Your code should do this using a loop.
+2. Refactor the function to use the higher-order function ```filter()```
+
+</details>
+
+<details>
+  <summary>Creating your own higher-order functions
+
+> Say you have this function:
+
+```javascript
+function calculate(numbers) {
+  let sum = 0;
+  for (const number of numbers) {
+    sum = sum + number;
+  }
+  return sum;
+}
+calculate([1, 2, 4]); // => 7
+```
+
+> Your task is to make the ```calculate()``` function a higher-order function that will take in three parameters. 
+
+> The first, ```operation```, will be a callback function that performs the desired math operation (sum and multiply are needed). 
+
+> The second parameter will be the initial value you start your operation with. 
+
+> The third will be an array of numbers that the operation will work with.
+
+Example signature of the new ```calculate()``` method:
+
+```javascript
+function calculate(operation, initialValue, numbers) {
+  // implmentation
+}
+```
+</details>
+
 
 ## The DOM and Browser APIs
 
-### LECTURE
-- setTimeout and setInterval
+<details>
+  <summary>setTimeout() and setInterval()</summary>
+
+> Browsers now implement a "Web API" that your code can call on for operations outside the single thread of your application
+
+>One of the functions available throught the Web API is ```setTimeout()```; another is ```setInterval()```
+
+> ```setTimeout()``` makes the code wait a specified amount of time before executing a passed-in callback function
+
+Example:
+
+```javascript
+function task() {
+    console.log('setTimeout Demo!')
+}
+
+setTimeout(task, 3000);
+```
+
+Another, more complex example:
+
+HTML:
+```html
+<p>JavaScript setTimeout Demo</p>
+<button onclick="showAlert();">Show</button>
+<button onclick="cancelAlert();">Cancel</button>
+```
+
+JS:
+```javascript
+var timeoutID;
+
+function showAlert() {
+    timeoutID = setTimeout(alert, 3000, 'setTimeout Demo!');
+}
+
+function clearAlert() {
+    clearTimeout(timeoutID);
+}
+```
+
+> ```setInterval()``` function in the Web API will perform a callback function repeatedly at a specified interval
+
+Example:
+
+```javascript
+setInterval(function(){ alert("Hello"); }, 3000);
+```
+
+</details>
+
 - LocalStorage
 - Web Workers
 - Websockets
