@@ -1075,6 +1075,48 @@ Example:
 </script>
 ```
 
+Let's look at this with a working code example:
+
+```html
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>A Basic HTML5 Template</title>
+  
+</head>
+
+<body>
+  <h3>Blog Posts</h3>
+  <form id="formElem">
+    <input type="text" name="title" value="My trip to Kansas">
+    <input type="text" name="body" value="That's a lot of corn, by golly!">
+    <input type="text" name="userId" value="1">
+    <input type="submit">
+  </form>
+  
+  <script>
+    formElem.onsubmit = async (e) => {
+      e.preventDefault();
+  
+      let response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+        method: 'POST',
+        body: new FormData(formElem)
+      });
+  
+      let result = await response.json();
+  
+      alert(result.id);
+    };
+  </script>
+  ```
+  
+</body>
+</html>
+```
+
 
 
 </details>
