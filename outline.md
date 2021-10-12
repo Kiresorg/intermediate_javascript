@@ -818,7 +818,7 @@ addOne(numbers);
 <details>
   <summary>Using filter()</summary>
 
-1. Create a function which taked in two parameters: an array of integers, and an empty array. Your code should do this using a loop.
+1. Create a function which taked in two parameters: an array of integers, and an empty array. Put all even numbers from the first array into the second array. Your code should do this using a loop.
 2. Refactor the function to use the higher-order function ```filter()```
 
 </details>

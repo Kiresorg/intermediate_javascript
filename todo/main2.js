@@ -1,7 +1,7 @@
 // Create a "close" button and append it to each list item
 let myNodelist = document.getElementsByTagName("LI");
-let i;
-for (i = 0; i < myNodelist.length; i++) {
+
+for (let i = 0; i < myNodelist.length; i++) {
   let span = document.createElement("SPAN");
   let txt = document.createTextNode("\u00D7");
   span.className = "close";
@@ -11,8 +11,8 @@ for (i = 0; i < myNodelist.length; i++) {
 
 // Click on a close button to hide the current list item
 let close = document.getElementsByClassName("close");
-let j;
-for (j = 0; j < close.length; j++) {
+
+for (let j = 0; j < close.length; j++) {
   close[j].onclick = () => {
     let div = this.parentElement;
     div.style.display = "none";
@@ -26,6 +26,7 @@ list.addEventListener('click', function(ev) {
     ev.target.classList.toggle('checked');
   }
 }, false);
+
 
 // Create a new list item when clicking on the "Add" button
 let newElement = () => {
