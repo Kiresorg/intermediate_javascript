@@ -1,19 +1,23 @@
-window.music = 'classical';
+// lexical scoping
 
-var foo = function () {
-    var music = 'blues';
-    return this.music;
-};
-
-bar = {
-    music : 'jazz',
-    getMusic : function(){
-        return this.music;
+function init() {
+    var name = 'FooBar'; // name is a local variable created by init
+    function displayName() { // displayName() is the inner function, a closure
+      console.log(name); // use variable declared in the parent function
     }
-}
+    displayName();
+  }
+  init();
 
-console.log(this.music); //'classical' (global)
+  // With a closure
 
-console.log(foo()); //'classical' (global)
-
-console.log(bar.getMusic()); //'jazz' (property of object: bar)
+  function makeFunc() {
+    var name = 'FooBarFTW';
+    function displayName() {
+      console.log(name);
+    }
+    return displayName;
+  }
+  
+  var myFunc = makeFunc();
+  myFunc();

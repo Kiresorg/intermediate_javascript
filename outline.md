@@ -722,7 +722,9 @@ function newElement() {
 
 </details>
 
-> YOUR TASK: Rewrite the JS to use ES6 syntax. Pay attention to the use of the ```let``` and ```const``` keywords, as well as arrow functions
+> YOUR TASK: 
+- Get the app working. You will need to flesh out the HTML and connect the CSS and JS files
+- Rewrite the JS to use ES6 syntax. Pay attention to the use of the ```let``` and ```const``` keywords, as well as arrow functions
 
 > Create your app in a new folder in your project. Call the folder ```todo```
 
@@ -731,11 +733,12 @@ function newElement() {
 ### LAB
 - Execution context (this)
 - YOUR TASK: Write a simple program to demonstrate use of the ```this``` keyword to a new JS learner
+  - Be sure to provide comments that a new learner can use to follow what's happening in the code
 
 ### LAB
 - Closures
 - YOUR TASK: Write a simple program to demonstrate use of the ```this``` keyword to a new JS learner
-
+ - Be sure to provide comments that a new learner can use to follow what's happening in the code
 
 ## Functional programming
 
@@ -907,27 +910,175 @@ setInterval(function(){ alert("Hello"); }, 3000);
 
 </details>
 
-- LocalStorage
-- Web Workers
-- Websockets
-- Location
-- URLSearchParams
-- History
+<details>
+  <summary>LocalStorage</summary>
 
-### DEMO
-- LocalStorage
-- Web Workers
-- Websockets
+> While the browser environment is not suited to provide persistent storage for your application, there are ways to store data temporarily
 
-### LAB
-- LocalStorage
-- WebWorkers
+> For years, we used cookies for this purpose, but they are not very versatile, and are not suited for large amounts of data
+
+> One of these additional options is "Local Storage". It is a collection of key/value string pairs. 
+
+> JS allows us to access Local Storage with another built-in Web API: the Web Storage API
+
+> Local Storage is available on a "per-origin" basis - that is, all pages from a single origin can access the stored data
+
+> While the Web Storage API actually provides two ojects for our use, we will be exploring only one: the ```window.localStorage``` object, which stores data with no expiration data
+>> THe other, ```window.sessionStorage```, only allows data storage for the length of a session
+
+Setting and retrieving data from Local Storage is pretty simple:
+
+```javascript
+// Store
+localStorage.setItem("lastname", "Gross");
+
+// Retrieve
+document.getElementById("result").innerHTML = localStorage.getItem("lastname");
+```
+
+There is an alternate get/set syntax, arguably cleaner:
+
+```javascript
+// Store
+localStorage.lastname = "Smith";
+// Retrieve
+document.getElementById("result").innerHTML = localStorage.lastname;
+```
+
+> Using the data in Local Storage
+>> Remember, the values in Local Storage are stored as _strings_ - if they represent other data types, you'll need to convert them for use
+
+Example:
+
+```javascript
+if (localStorage.clickcount) {
+  localStorage.clickcount = Number(localStorage.clickcount) + 1;
+} else {
+  localStorage.clickcount = 1;
+}
+document.getElementById("result").innerHTML = "You have clicked the button " +
+localStorage.clickcount + " time(s).";
+```
+
+</details>
+
+<details>
+  <summary>Web Workers</summary>
+
+> JavaScript is executed in a single thread in the browser. What do you do if you want to run a background process?
+
+> Browsers implement another Web API, the Web Workers API, for this purpose
+
+> Using a built-in ```Worker``` object, which can be instantiated, you can run JS in the background of your app
+
+Example of a background process:
+
+```javascript
+var i = 0;
+
+function timedCount() {
+  i = i + 1;
+  postMessage(i);
+  setTimeout("timedCount()",500);
+}
+
+timedCount();
+```
+
+Example of calling that process with a Web Worker:
+
+```html
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>Increment numbers: <output id="result"></output></p>
+<button onclick="startWorker()">Start Worker</button> 
+<button onclick="stopWorker()">Stop Worker</button>
+
+<script>
+var w;
+
+function startWorker() {
+  if(typeof(Worker) !== "undefined") {
+    if(typeof(w) == "undefined") {
+      w = new Worker("demo_workers.js");
+    }
+    w.onmessage = function(event) {
+      document.getElementById("result").innerHTML = event.data;
+    };
+  } else {
+    document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Workers...";
+  }
+}
+
+function stopWorker() { 
+  w.terminate();
+  w = undefined;
+}
+</script>
+
+</body>
+</html>
+```
+
+</details>
+
+### LAB: Using Local Storage
+
+<details>
+  <summary>Using Local Storage</summary>
+
+> Your task: Refactor the Todo app to store todo items in local storage
+>> Your app will need to build an HTML unordered list using the key/value pairs stored in Local Storage
+>> Try to use ES6 syntax where possible
+
+</details>
 
 ## Forms in the browser
 
-### LECTURE
-- Form elements
-- FormData and forms, vs. AJAX
+<details>
+  <summary>FormData and forms, vs. AJAX</summary>
+
+> With HTML forms and their input fields is very common
+
+> JavaScript in the browser has a built-in object we can use to make this easier: the ```FormData``` object:
+
+```javascript
+let formData = new FormData([form]);
+```
+
+> If the ```form``` parameter is included, and it's a ```<form>``` element on your page, the key/value pairs from your form will be automatically added to the newly-instatiated ```FormData``` object (```formData``` here)
+
+Example:
+
+```javascript
+<form id="formElem">
+  <input type="text" name="name" value="John">
+  <input type="text" name="surname" value="Smith">
+  <input type="submit">
+</form>
+
+<script>
+  formElem.onsubmit = async (e) => {
+    e.preventDefault();
+
+    let response = await fetch('/article/formdata/post/user', {
+      method: 'POST',
+      body: new FormData(formElem)
+    });
+
+    let result = await response.json();
+
+    alert(result.message);
+  };
+</script>
+```
+
+
+
+</details>
+
 - Input validation
 - Local file access and file input
 
