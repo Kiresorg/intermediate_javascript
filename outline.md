@@ -1555,22 +1555,9 @@ console.log(reeba.describe());
 - Linting
 - TypeScript
 
-### DEMO
-- Node, npm, and yarn
-- Babel
-- Webpack
-- Linting
+## DEMO
+- Node, npm,
 
-### LAB
-- Setting up node
-- Using Babel and Webpack
-NOTE: Simple React app
-- Componenet in straight JS
-- same in JSX
-- same in TS
-- demo transpilation into JS for the last two
-
-- Linting
 
 ## Testing (with Jest)
 
@@ -1584,28 +1571,10 @@ NOTE: Simple React app
 
 
 ## Debugging
-
-### LECTURE and DEMO
-- console.log Driven Development [just touch on this]
-- Browser DevTools [same]
 - Debugger in IDE
 
-### LAB
-- Using DevTools
-- Debugging client-side JS in the IDE
 
-## Intro to Web Security
 
-### LECTURE
-- Cross-Site Scripting (XSS)
-- Content Security Policy
-- Escaping user input
-
-### DEMO
-- An XSS attack
-
-### LAB
-- Proof a site against XSS
 
 ## Where do you go from here?
 
@@ -1614,6 +1583,7 @@ NOTE: Simple React app
 - JS and REST APIs
 - Deper dive into async programming in JS
 - Working with the new JS frameworks - what will they abstract? How do I approach learning them?
+- Web security
 
 ## Wrapping up
 
