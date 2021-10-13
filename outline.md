@@ -1450,6 +1450,20 @@ Employee.prototype.last_name_first = function() {
 </details>
 
 
+## LAB: Use classical OOP in the fetch-api-demo application
+
+<details>
+  <summary>Refactor the fetch-api-demo application as follows:</summary>
+
+1. In the API call, only return one user
+2. In the UI, display the user's ID and name
+3. Refactor the app to use a User class. Instantiate a User object after successful API call. Use that object to populate the UI
+4. Change the API call to get all users from the API
+5. Refactor the User class to have a method to create a display version of the name that includes the id prepended to the name - example: "1 - Erik Gross"
+6. Refactor the UI creation code to display all users, utilizing the new function in the class
+
+</details>
+
 <details>
   <summary>Object Oriented Programming (Prototypal)</summary>
 
