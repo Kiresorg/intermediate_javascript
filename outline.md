@@ -1536,8 +1536,20 @@ console.log(reeba.describe());
 
 ## JavaScript Tooling
 
-### LECTURE
-- Node, npm, and yarn
+<details>
+  <summary>Node, npm, and yarn</summary>
+
+> Node provides two primary functions:
+>> It has a runtime that provides an exection environment for JavaScript _outside of a browser_
+
+>> It has a built-in, _highly performant_ web server (supports up to 4000 concurrent sessions)
+
+> npm (Node Package Manager) helps manage the (often very complex) dependencies that JavaScript projects require.
+>> It is similar to nuget in the .NET space
+
+> yarn is another popular JS package manager
+
+</details>
 - Babel
 - Webpack
 - Linting
@@ -1564,18 +1576,12 @@ NOTE: Simple React app
 
 ### LECTURE
 - Basics of Jest
-- Matchers
-- Setup and environment
-- Stubs and spies
-- Timers
-- Async
-- Module mocks
+-
 
-### LAB
+## DEMO: Jest
 - Setting up Jest
 - Writing simple tests
-- Testing async functions
-- Module mocks
+
 
 ## Debugging
 
