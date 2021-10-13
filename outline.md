@@ -923,8 +923,8 @@ setInterval(function(){ alert("Hello"); }, 3000);
 
 > Local Storage is available on a "per-origin" basis - that is, all pages from a single origin can access the stored data
 
-> While the Web Storage API actually provides two ojects for our use, we will be exploring only one: the ```window.localStorage``` object, which stores data with no expiration data
->> THe other, ```window.sessionStorage```, only allows data storage for the length of a session
+> While the Web Storage API actually provides two ojects for our use, we will be exploring only one: the ```window.localStorage``` object, which stores data with no expiration date
+>> The other, ```window.sessionStorage```, only allows data storage for the length of a session
 
 Setting and retrieving data from Local Storage is pretty simple:
 
@@ -1002,7 +1002,7 @@ var w;
 function startWorker() {
   if(typeof(Worker) !== "undefined") {
     if(typeof(w) == "undefined") {
-      w = new Worker("demo_workers.js");
+      w = new Worker("demo_workers.js"); // point to the JS file with your long-running code in it
     }
     w.onmessage = function(event) {
       document.getElementById("result").innerHTML = event.data;
@@ -1048,7 +1048,7 @@ function stopWorker() {
 let formData = new FormData([form]);
 ```
 
-> If the ```form``` parameter is included, and it's a ```<form>``` element on your page, the key/value pairs from your form will be automatically added to the newly-instatiated ```FormData``` object (```formData``` here)
+> If the ```form``` parameter is included, and it's a ```<form>``` element on your page, the key/value pairs from your form will be automatically added to the newly-instantiated ```FormData``` object (```formData``` here)
 
 Example:
 
@@ -1117,18 +1117,15 @@ Let's look at this with a working code example:
 </html>
 ```
 
-
-
 </details>
 
-- Input validation
-- Local file access and file input
+## LAB: Form creation, validation and submission
+<details>
+  <summary>Create a form for creating a blog post
 
-### DEMO
-- Form creation, validation and submission
+> Your task: create a web page that will let user create a blog post. Use the info at https://jsonplaceholder.typicode.com to determine form fields and how to submit the request. On a successful blog post creation, have an alert appear with a success message
 
-### LAB
-- Form creation, validation and submission
+</details>
 
 </details>
 
@@ -1205,7 +1202,7 @@ fetch(url)
 ;
 ```
 
-Example with API call: [TODO: let them know what they can control]
+Example with API call:
 
 ```javascript
 const url = "https://jsonplaceholder.typicode.com/posts/1";
@@ -1240,13 +1237,20 @@ Another example, calling an API
 [TODO: handle error condition (try/catch); don't use .then syntax - assign response to a var]
 
 ```javascript
-const url = "https://jsonplaceholder.typicode.com/posts/1";
+async function callAPI() {
+  const url = "https://jsonplaceholder.typicode.com/posts/1";
 
-async function callApi() {
-	return await fetch(url);
+  try {
+      let result = await fetch(url);
+      console.log(await result.json());
+  } catch (e) {
+      console.error(e);
+  } finally {
+      console.log('cleanup actions');
+  }
 }
 
-callApi().then((value) => console.log(value))
+callAPI();
 ```
 
 </details>
@@ -1270,69 +1274,227 @@ callApi().then((value) => console.log(value))
 - Automatic transforms for JSON data
 - Client side support for protecting against XSRF
 
-> Including Axios:
-
-[TODO: address including local file for using axios]
+> Including Axios from a CDN:
 
 ```html
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 ```
 
-Example:
+> Yu can also download the axios files and include them locally in your project
+
+Example HTTP call using axios:
 
 ```javascript
-const url = "https://jsonplaceholder.typicode.com/posts/1";
-
-async function callApi() {
-	return await axios.get(url);
-}
-
-callApi().then((value) => console.log(value))
+axios.get('https://jsonplaceholder.typicode.com/posts/1')
+  .then(function (response) {
+    // handle success
+    console.log(response.data);
+  })
+  .catch(function (error) {
+    // handle error
+    console.log(error);
+  })
+  .then(function () {
+    // always executed
+  });
 ```
-
-[TODO: configure axios (set default url?) ALSO: talk about how the data you need in ANY response is nested; you need to know how to access it]
+</details>
 
 ### LAB
-Your task: Using the "fetch-api-demo' project we created, adapt is as follows:
+Your task: Using the "fetch-api-demo' provided, adapt it
+ as follows:
 1. Convert the API calls to use Promises instead of pre-ES6 syntax
 2. Convert to async/await
 3. Use the axios library instead of the fetch API
 
+## CommonJS Modules
+
+<details>
+  <summary>Organizing your code</summary>
+
+> Modules are "clusters" of code. Ideally, they are _self-contained_, with _distinct functionality_
+
+> If they are well-designed, you have a lot of versatility with the modules you use in your application. You can add, remove, or move modules without distrupting the system that is your application
+
+> While there are several different ways to design and organize your code in this manner, one of the most widely-accepted is called "CommonJS Modules"
+>> CommonJS  is a volunteer working group that designs and implements JavaScript APIs for declaring modules.
+
+> A CommonJS module is basically a reusable chunk of JavaScript which _exports_ specific objects - this makes those objects available for _other_ modules to use in their code. That is done by _requiring_ the exported object in the second module.
+>> From here forward, we will use the term "module" to refer to CommonJS modules
+
+> VERY IMPORTANT NOTE: _With CommonJS, each JavaScript file stores modules in its own unique module context (just like wrapping it in a closure). In this scope, we use the module.exports object to expose modules, and require to import them._
+>> This lets us protect the data internal to a module, exposing only what we want other parts of our program to have visibility to.
+
+> Namespaces: Modules make use of "namespaces" - bounded scope areas, useful for controlling data integrity with code sections.
+
+Example of a module:
+
+```javascript
+function myModule() {
+  this.hello = function() {
+    return 'hello from myModule()!';
+  }
+
+  this.goodbye = function() {
+    return 'now leaving myModule()!';
+  }
+}
+
+module.exports = myModule;
+```
+
+> Modules are used by other JS code in your application, almost as a function call. By "pointing" to a module, you can access whatever properties and behavior the module exposes.
+
+Example of using the above ```myModule``` module - remember, this would be in _another JS file_:
+
+```javascript
+var myModule = require('myModule');
+
+var myModuleInstance = new myModule();
+myModuleInstance.hello(); // 'hello!'
+myModuleInstance.goodbye(); // 'goodbye!'
+```
+
+</details>
+
 ## OOP in JS - old vs. new syntax
-### LECTURE
-- Object Oriented Programming (Classical)
-- Methods
-- Static fields
-- Private fields
-- Getters and Setters
-- Instance fields
-- Inheritance
 
-### LAB
-- Classical OOP in JS
+<details>
+  <summary>Object Oriented Programming (Classical)</summary>
 
-### LECTURE
-- Object Oriented Programming (Prototypal)
-- Prototype chain
-- Constructor functions
-- Behavior sharing patterns
+> There are two primry aspects of Object-Oriented Programming to look at here: 
+>> Instantiation
 
-### DEMO
-- Prototypal OOP
+>> Inheritance
 
-## More on Functional Programming
-- Immutability
-- Currying and partial application
-- Point-free programming
-- Ramda / Lodash
-- Function composition
+> Let's explore "classical" instantiation in JS. We will make a _class_ with a _constructor_, and then show how to instantiate it
 
-### DEMO
-- Immutability
-- Currying and partial application
-- Point-free programming
-- Ramda / Lodash
-- Function composition
+```javascript
+// class definition with constructor
+var Person = function(name) {
+  this.name = name;
+};
+// instantiation
+var erik = new Person("Erik");
+var jenny = new Person("Jenny");
+
+console.log(erik.name);
+```
+
+> Let's examine what we actually made here: Along with the Person class, JavaaScript also creates (behind the scenes) a _prototype_ for that class
+
+> A prototype is the "parent" object behind any object in JavaScript. All JS objects inherit properties and methods from an associated prototype
+>> Examples: ```Date``` ojbects inherit from ```Date.prototype```; ```Array``` objects inherit from ```Array.prototype```
+
+> We shouldn't work with the prototypes for built-in objects, but we _will_ want to interact with the prototypes for the class objects we create. Why?
+>> _YOU CANNOT ADD NEW PROPERTIES AND METHODS TO A CLASS CONSTRUCTOR_
+
+> By using the ```prototype``` property of an object, you _can_ add new properties to a constructor
+
+Example of adding a new property to a constructor:
+
+```javascript
+var Person = function(first, last, age, eyecolor) {
+  this.firstName = first;
+  this.lastName = last;
+  this.age = age;
+  this.eyeColor = eyecolor;
+}
+
+Person.prototype.nationality = "English";
+```
+
+Example of adding a new method to a constructor:
+
+```javascript
+var Person = function(first, last, age, eyecolor) {
+  this.firstName = first;
+  this.lastName = last;
+  this.age = age;
+  this.eyeColor = eyecolor;
+}
+
+Person.prototype.displayName = function() {
+  return this.firstName + " " + this.lastName;
+};
+```
+
+> Now let's look at "classical" inheritance in JavaScript
+
+> Look again at our ```Person``` class
+
+```javascript
+var Person = function(first, last, age, eyecolor) {
+  this.firstName = first;
+  this.lastName = last;
+  this.age = age;
+  this.eyeColor = eyecolor;
+}
+```
+
+> Say we want another class, ```Employee```, that will inherit from our ```Person``` class - but also have a new ```job_title``` property, and a new ```last_name_first()``` method:
+
+> First, make a constructor for our ```Employee``` class:
+
+```javascript
+var Employee = function(first, last, age, eyecolor, job_title) {
+  Person.call(this, first, last, age, eyecolor); // call() lets you call another function in the current context
+  this.job_title = job_title;
+}
+
+Employee.prototype.last_name_first = function() {
+  return this.lastName + ", " + this.firstName;
+}
+```
+
+</details>
+
+
+<details>
+  <summary>Object Oriented Programming (Prototypal)</summary>
+
+> This approach is relatively new (~2011)
+
+> It relies on the fact that every object has an associated _prototype_ - and we can use that protype to perform instantiation and inheritance
+
+Example of creating a class:
+
+```javascript
+var human = {
+  // this is just a constructor for a class - but it has a prototype
+
+  // properties:
+  species: "human",
+  saySpecies: function() {
+    console.log(this.species);
+  },
+  sayName: function() {
+    console.log(this.name);
+  }
+};
+
+// inheritance
+var artist = Object.create(human); // makes a new object that inherits props and methods from human class
+```
+
+> This syntax for creating classes makes it easy to add behavior to a child class:
+
+```javascript
+artist.describe = function() {
+  console.log("Creates art in this medium:" + this.medium);
+}
+```
+
+> You can now instantiate child objects and access the object's properties and the behavior of it _and_ its parent:
+
+```javascript
+var reeba = Object.create(musician);
+reeba.name = "Reeba McEntire";
+reeba.medium = "voice";
+
+console.log(reeba.describe());
+```
+</details>
 
 </details>
 
@@ -1343,10 +1505,34 @@ Your task: Using the "fetch-api-demo' project we created, adapt is as follows:
 
 ## Managing UI State
 
-### LECTURE
-- Dangers of UI as a function of time
-- Principles of declarative UI
-- Immutable CRUD operations in app state
+<details>
+  <summary>Dangers of UI as a function of time</summary>
+
+> The HTTP protocol is stateless - therefore, it isn't possible to guarantee that your web page UI) is in sync with the server (and the state of your data)
+
+> Various approaches to handle this have been explored - worker processes to ping the server; sockets to provide two-way binding of web page elements/data to server-side proivders, etc.
+
+> There will never be a method that guarantees concidence (identical state in real time) between a web UI and it's data source, due to network latency
+
+</details>
+
+<details>
+  <summary>Principles of declarative UI</summary>
+
+> Let's look at the difference between _imperative_ programming and _declarative_ programming, described simply:
+>> In imperative programming, we tell the computer _how_ to do a thing, such that the state of our program gets where we want it
+
+>> In declarative programming, we tell the computer _what state we desire_, without specifying how the computer is to get there
+
+> Working with web UI in an imperative approach is a problem in web development.
+
+> Example: You have a web page that will need a table to appear on the page if the user hovers over a specific pafge element. In an imperative approach, you would have to write code that specifically creates that exact table. If another, similar table is needed elsewhere, you will need to provide similar (but specific) instruction at that location.
+
+> In a declarative approach, you would instead provide a description of _what a table would look like if there were one_, and when one is needed, the program creates it at that time. This description can then be used anywhere such a table is needed, and the program will take care of implementation details (web page element creation; data binding, etc.)
+
+> This declarative approach is used in React and other UI tools.
+
+</details>
 
 ## JavaScript Tooling
 
